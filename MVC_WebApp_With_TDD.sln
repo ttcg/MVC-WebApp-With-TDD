@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.10
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVC_WebApp_With_TDD", "MVC_WebApp_With_TDD\MVC_WebApp_With_TDD.csproj", "{F5F48F1F-34A3-4AD9-930E-6AA20E21AEB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVC_WebApp_With_TDD.Tests", "MVC_WebApp_With_TDD.Tests\MVC_WebApp_With_TDD.Tests.csproj", "{7ADF950C-48D2-46CB-B0FB-F26B495B0A9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5F48F1F-34A3-4AD9-930E-6AA20E21AEB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5F48F1F-34A3-4AD9-930E-6AA20E21AEB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5F48F1F-34A3-4AD9-930E-6AA20E21AEB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5F48F1F-34A3-4AD9-930E-6AA20E21AEB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ADF950C-48D2-46CB-B0FB-F26B495B0A9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ADF950C-48D2-46CB-B0FB-F26B495B0A9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ADF950C-48D2-46CB-B0FB-F26B495B0A9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ADF950C-48D2-46CB-B0FB-F26B495B0A9D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

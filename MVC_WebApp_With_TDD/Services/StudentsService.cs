@@ -5,14 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Data.Entity;
 
 namespace MVC_WebApp_With_TDD.Services
 {
-    public interface IStudentsService
+    public interface IStudentsService 
     {
         int Insert(Student s);
         int Update(Student s);
-        int Delete(Student s);
+        int Delete(int id);
         Student GetDetail(int id);
         IEnumerable<Student> GetAll();
     }
@@ -26,19 +27,28 @@ namespace MVC_WebApp_With_TDD.Services
             _context = context;
         }
 
-        public int Delete(Student s)
+        public int Delete(int id)
         {
-            throw new NotImplementedException();
+            var objToDelete = _context.Students.Find(id);
+
+            if (objToDelete != null)
+            {
+                _context.Students.Remove(objToDelete);
+                return _context.SaveChanges();
+            }
+
+            return -1;
         }
 
         public IEnumerable<Student> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Students
+                    .OrderByDescending(o => o.StudentID);
         }
 
         public Student GetDetail(int id)
         {
-            throw new NotImplementedException();
+            return _context.Students.Find(id);
         }
 
         public int Insert(Student s)
@@ -47,9 +57,10 @@ namespace MVC_WebApp_With_TDD.Services
             return _context.SaveChanges();
         }
 
-        int IStudentsService.Update(Student s)
+        public int Update(Student s)
         {
-            throw new NotImplementedException();
+            _context.Entry(s).State = EntityState.Modified;
+            return _context.SaveChanges();
         }
     }
 }

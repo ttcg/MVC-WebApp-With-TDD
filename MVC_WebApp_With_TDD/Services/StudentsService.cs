@@ -16,6 +16,7 @@ namespace MVC_WebApp_With_TDD.Services
         int Delete(int id);
         Student GetDetail(int id);
         IEnumerable<Student> GetAll();
+        Student GetByName(string FirstName, string LastName);
     }
 
     public class StudentsService : IStudentsService
@@ -46,6 +47,11 @@ namespace MVC_WebApp_With_TDD.Services
                     .OrderByDescending(o => o.StudentID);
         }
 
+        public Student GetByName(string FirstName, string LastName)
+        {
+            return _context.Students.SingleOrDefault(s => s.FirstName == FirstName && s.LastName == LastName);
+        }
+
         public Student GetDetail(int id)
         {
             return _context.Students.Find(id);
@@ -59,7 +65,9 @@ namespace MVC_WebApp_With_TDD.Services
 
         public int Update(Student s)
         {
+            s.DateModified = DateTime.Now;
             _context.Entry(s).State = EntityState.Modified;
+            _context.Entry(s).Property(x => x.DateCreated).IsModified = false;
             return _context.SaveChanges();
         }
     }

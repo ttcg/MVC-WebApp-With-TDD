@@ -25,10 +25,7 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.DateCreated)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateModified)
-        </th>
+        </th>        
         <th></th>
     </tr>
 
@@ -50,11 +47,10 @@
             @Html.DisplayFor(modelItem => item.DateCreated)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DateModified)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.StudentID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.StudentID }) |
+            @Html.ActionLink("Edit", "Edit", new { id=item.StudentID, name=item.FirstName }) |
+            @Html.ActionLink("Details", "Details", new { id = item.StudentID, name = item.FirstName }) |
+            <a href="Students/Details/@item.StudentID/@item.FirstName" >Details</a>
+            
             @Html.ActionLink("Delete", "Delete", new { id=item.StudentID })
         </td>
     </tr>

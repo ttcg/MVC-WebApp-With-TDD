@@ -15,12 +15,11 @@ namespace MVC_WebApp_With_TDD.Controllers
 {
     public class StudentsController : Controller
     {
-        private StudentsService _studentService; 
+        private IStudentsService _studentService; 
 
-        public StudentsController()
+        public StudentsController(IStudentsService studentService)
         {
-            MVCWebAppDbContext db = new MVCWebAppDbContext();
-            _studentService = new StudentsService(db);
+            _studentService = studentService;
         }
 
         // GET: Students
@@ -30,7 +29,8 @@ namespace MVC_WebApp_With_TDD.Controllers
         }
 
         // GET: Students/Details/5
-        public ActionResult Details(int? id)
+        [Route("Students/Details/{id}/{name?}")]
+        public ActionResult Details(int? id, string name)
         {
             if (id.HasValue == false)
             {
@@ -41,6 +41,7 @@ namespace MVC_WebApp_With_TDD.Controllers
             {
                 return HttpNotFound();
             }
+            student.FirstName += name;
             return View(student);
         }
 
@@ -55,7 +56,7 @@ namespace MVC_WebApp_With_TDD.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StudentID,RefNo,FirstName,LastName,DateOfBirth,DateCreated,DateModified")] Student student)
+        public ActionResult Create([Bind(Include = "StudentID,RefNo,FirstName,LastName,DateOfBirth")] Student student)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +67,7 @@ namespace MVC_WebApp_With_TDD.Controllers
             return View(student);
         }
 
-        // GET: Students/Edit/5
+        // GET: Students/Edit/5        
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -86,7 +87,7 @@ namespace MVC_WebApp_With_TDD.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "StudentID,RefNo,FirstName,LastName,DateOfBirth,DateCreated,DateModified")] Student student)
+        public ActionResult Edit([Bind(Include = "StudentID,RefNo,FirstName,LastName,DateOfBirth")] Student student)
         {
             if (ModelState.IsValid)
             {
@@ -118,6 +119,12 @@ namespace MVC_WebApp_With_TDD.Controllers
         {
             _studentService.Delete(id);
             return RedirectToAction("Index");
+        }
+
+        [Route("Students/TestRoute/{FirstName}/{Surname}")]
+        public ActionResult TestRoute(string FirstName, string Surname)
+        {
+            return Json(_studentService.GetByName(FirstName, Surname), JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

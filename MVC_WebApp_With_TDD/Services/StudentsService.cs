@@ -54,7 +54,8 @@ namespace MVC_WebApp_With_TDD.Services
 
         public Student GetDetail(int id)
         {
-            return _context.Students.Find(id);
+            //return _context.Students.Find(id);
+            return _context.Students.SingleOrDefault(s => s.StudentID == id);
         }
 
         public int Insert(Student s)

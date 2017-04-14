@@ -14,6 +14,6 @@ namespace MVC_WebApp_With_TDD.DbContexts
         {
         }
 
-        public DbSet<Student> Students { get; set; }
+        public virtual DbSet<Student> Students { get; set; }
     }
 }

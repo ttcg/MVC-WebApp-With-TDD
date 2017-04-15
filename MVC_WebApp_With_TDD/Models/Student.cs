@@ -33,5 +33,10 @@ namespace MVC_WebApp_With_TDD.Models
         [DataType(DataType.DateTime)]
         public DateTime? DateModified { get; set; }
 
+        [Required]
+        public int CampusID { get; set; }
+
+        [ForeignKey("CampusID")]
+        public virtual Campus Campus { get; set; }
     }
 }

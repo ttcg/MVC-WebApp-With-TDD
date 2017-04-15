@@ -25,8 +25,8 @@ namespace MVC_WebApp_With_TDD.Tests
         public void should_Add_Student()
         {
             using (var dbContextTransaction = _dbContext.Database.BeginTransaction())
-            {
-                var student = new Student() { RefNo = "12456343", FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-10) };
+            {                
+                var student = new Student() { RefNo = "12456343", FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-10), Campus = new Campus { CampusID = 1, CampusName = "Test" } };
                 _studentService.Insert(student);
                 Assert.True(student.StudentID > 0);
 

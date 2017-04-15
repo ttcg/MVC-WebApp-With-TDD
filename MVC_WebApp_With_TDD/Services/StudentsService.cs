@@ -44,6 +44,7 @@ namespace MVC_WebApp_With_TDD.Services
         public IEnumerable<Student> GetAll()
         {
             return _context.Students
+                    .Include(a => a.Campus)
                     .OrderByDescending(o => o.StudentID);
         }
 

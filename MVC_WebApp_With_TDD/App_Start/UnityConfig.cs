@@ -12,7 +12,8 @@ namespace MVC_WebApp_With_TDD
 			var container = new UnityContainer();
 
             container.RegisterType<IStudentsService, StudentsService>();
-            
+            container.RegisterType<ICampusService, CampusService>();
+
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }
     }

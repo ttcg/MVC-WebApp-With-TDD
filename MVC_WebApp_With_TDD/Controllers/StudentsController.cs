@@ -10,16 +10,21 @@ using System.Web.Mvc;
 using MVC_WebApp_With_TDD.DbContexts;
 using MVC_WebApp_With_TDD.Models;
 using MVC_WebApp_With_TDD.Services;
+using MVC_WebApp_With_TDD.ViewModels;
 
 namespace MVC_WebApp_With_TDD.Controllers
 {
     public class StudentsController : Controller
     {
-        private IStudentsService _studentService; 
+        private IStudentsService _studentService;
+        private ICampusService _campusService;
 
-        public StudentsController(IStudentsService studentService)
+        public StudentsController(
+            IStudentsService studentService,
+            ICampusService campusService)
         {
             _studentService = studentService;
+            _campusService = campusService;
         }
 
         // GET: Students
@@ -48,7 +53,25 @@ namespace MVC_WebApp_With_TDD.Controllers
         // GET: Students/Create
         public ActionResult Create()
         {
-            return View();
+            var model = new StudentViewModel();
+
+            model.Student = new Student();
+            model.Student.RefNo = "11112222";
+            model.Student.FirstName = "Test";
+            model.Student.LastName = "Surname";
+            model.Student.DateOfBirth = DateTime.Now;
+            model.Campuses = PopulateCampusesList();
+
+            return View(model);
+        }
+
+        private IEnumerable<SelectListItem> PopulateCampusesList()
+        {
+            return _campusService.GetAll().Select(x => new SelectListItem
+            {
+                Value = x.CampusID.ToString(),
+                Text = x.CampusName
+            });
         }
 
         // POST: Students/Create
@@ -56,15 +79,17 @@ namespace MVC_WebApp_With_TDD.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StudentID,RefNo,FirstName,LastName,DateOfBirth")] Student student)
+        public ActionResult Create(StudentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _studentService.Insert(student);
+                _studentService.Insert(model.Student);
                 return RedirectToAction("Index");
             }
 
-            return View(student);
+            model.Campuses = PopulateCampusesList();
+
+            return View(model);
         }
 
         // GET: Students/Edit/5        
@@ -74,12 +99,17 @@ namespace MVC_WebApp_With_TDD.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = _studentService.GetDetail(id.Value); 
-            if (student == null)
+            var model = new StudentViewModel();
+            model.Student = _studentService.GetDetail(id.Value); 
+
+            if (model.Student == null)
             {
                 return HttpNotFound();
             }
-            return View(student);
+            
+            model.Campuses = PopulateCampusesList();
+
+            return View(model);
         }
 
         // POST: Students/Edit/5
@@ -87,14 +117,16 @@ namespace MVC_WebApp_With_TDD.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "StudentID,RefNo,FirstName,LastName,DateOfBirth")] Student student)
+        public ActionResult Edit(StudentViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _studentService.Update(student);
+                _studentService.Update(model.Student);
                 return RedirectToAction("Index");
             }
-            return View(student);
+
+            model.Campuses = PopulateCampusesList();
+            return View(model);
         }
 
         // GET: Students/Delete/5

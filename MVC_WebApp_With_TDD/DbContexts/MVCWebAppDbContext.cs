@@ -15,5 +15,12 @@ namespace MVC_WebApp_With_TDD.DbContexts
         }
 
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<Campus> Campuses { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Campus>()
+                    .ToTable("Campuses", "dbo");
+        }
     }
 }

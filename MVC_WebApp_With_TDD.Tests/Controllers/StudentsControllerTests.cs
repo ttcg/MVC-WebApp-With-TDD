@@ -17,23 +17,34 @@ namespace MVC_WebApp_With_TDD.Tests.Controllers
     {
         private StudentsController _controller;
         Mock<IStudentsService> _studentService;
+        Mock<ICampusService> _campusService;
 
         public StudentsControllerTests()
         {
             _studentService = new Mock<IStudentsService>();
-            _controller = new StudentsController(_studentService.Object);
+            _campusService = new Mock<ICampusService>();
+
+            var campuses = new List<Campus>()
+            {
+            new Campus() { CampusID = 1, CampusName = "SMF" },
+            new Campus() { CampusID = 2, CampusName = "WGC" }
+            };
+
+            _campusService.Setup(s => s.GetAll()).Returns(campuses);
+
+            _controller = new StudentsController(_studentService.Object, _campusService.Object);
         }
 
         [Fact]
         public void Index()
-        {            
+        {
             var studentList = new List<Student>()
             {
             new Student() { StudentID = 1, RefNo = "12456343", FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-10), DateCreated = DateTime.Now },
             new Student() { StudentID = 2, RefNo = "87984564", FirstName = "Pete", LastName = "Luck", DateOfBirth = DateTime.Now.AddYears(-20), DateCreated = DateTime.Now.AddDays(1) }
             };
 
-            _studentService.Setup(s => s.GetAll()).Returns(studentList);            
+            _studentService.Setup(s => s.GetAll()).Returns(studentList);
 
             ViewResult vr = _controller.Index() as ViewResult;
 
@@ -42,7 +53,7 @@ namespace MVC_WebApp_With_TDD.Tests.Controllers
             Assert.True(model.Count == 2);
 
             _studentService.Verify();
-        }        
+        }
 
         [Fact]
         public void Details()
@@ -90,7 +101,10 @@ namespace MVC_WebApp_With_TDD.Tests.Controllers
 
             _studentService.Setup(s => s.Insert(student)).Returns(1);
 
-            var vr = _controller.Create(student) as RedirectToRouteResult;            
+            var viewModel = new ViewModels.StudentViewModel();
+            viewModel.Student = student;
+
+            var vr = _controller.Create(viewModel) as RedirectToRouteResult;
 
             Assert.NotNull(vr);
 
@@ -102,24 +116,27 @@ namespace MVC_WebApp_With_TDD.Tests.Controllers
         [Fact]
         public void should_fail_CreatePost()
         {
-            var student = new Student() { StudentID = 1, RefNo = string.Empty, FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-10), DateCreated = DateTime.Now };
+            var student = new Student() { StudentID = 1, RefNo = string.Empty, FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-10), DateCreated = DateTime.Now, CampusID=1 };
 
             _controller.ModelState.AddModelError("RefNo", "Invalid RefNo");
 
-            var vr = _controller.Create(student) as ViewResult;
+            var viewModel = new ViewModels.StudentViewModel();
+            viewModel.Student = student;
+
+            var vr = _controller.Create(viewModel) as ViewResult;
 
             Assert.NotNull(vr);
 
-            var model = vr.Model as Student;
+            var model = vr.Model as ViewModels.StudentViewModel;
 
-            Assert.Equal(student.StudentID, model.StudentID);
-            Assert.Equal(student.FirstName, model.FirstName);
+            Assert.Equal(student.StudentID, model.Student.StudentID);
+            Assert.Equal(student.FirstName, model.Student.FirstName);
         }
 
         [Fact]
         public void Edit()
         {
-            var student = new Student() { StudentID = 1, RefNo = string.Empty, FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-10), DateCreated = DateTime.Now };
+            var student = new Student() { StudentID = 1, RefNo = string.Empty, FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-10), DateCreated = DateTime.Now, CampusID = 1 };
 
             _studentService.Setup(s => s.GetDetail(1)).Returns(student);
 
@@ -127,10 +144,10 @@ namespace MVC_WebApp_With_TDD.Tests.Controllers
 
             Assert.NotNull(vr);
 
-            var model = vr.Model as Student;
+            var model = vr.Model as ViewModels.StudentViewModel;
 
-            Assert.Equal(student.StudentID, model.StudentID);
-            Assert.Equal(student.FirstName, model.FirstName);
+            Assert.Equal(student.StudentID, model.Student.StudentID);
+            Assert.Equal(student.FirstName, model.Student.FirstName);
 
             _studentService.Verify();
         }
@@ -142,22 +159,29 @@ namespace MVC_WebApp_With_TDD.Tests.Controllers
 
             _studentService.Setup(s => s.Update(student)).Returns(1);
 
-            var vr = _controller.Edit(student) as RedirectToRouteResult;
+            var viewModel = new ViewModels.StudentViewModel();
+            viewModel.Student = student;
+
+            var vr = _controller.Edit(viewModel) as RedirectToRouteResult;
 
             Assert.NotNull(vr);
-            Assert.Equal("Index", vr.RouteValues["action"]);            
+            Assert.Equal("Index", vr.RouteValues["action"]);
         }
 
+        [Fact]
         public void should_fail_EditPost()
         {
             var student = new Student() { StudentID = 1, RefNo = string.Empty, FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-10), DateCreated = DateTime.Now };
             _controller.ModelState.AddModelError("RefNo", "Invalid RefNo");
 
-            var vr = _controller.Edit(student) as ViewResult;
-            var model = vr.Model as Student;
+            var viewModel = new ViewModels.StudentViewModel();
+            viewModel.Student = student;
+
+            var vr = _controller.Edit(viewModel) as ViewResult;
+            var model = vr.Model as ViewModels.StudentViewModel;
 
             Assert.NotNull(vr);
-            Assert.Equal(student.StudentID, model.StudentID);
+            Assert.Equal(student.StudentID, model.Student.StudentID);
         }
 
         [Fact]
@@ -171,7 +195,7 @@ namespace MVC_WebApp_With_TDD.Tests.Controllers
             var model = vr.Model as Student;
 
             Assert.NotNull(vr);
-            Assert.Equal(student.StudentID,  model.StudentID);
+            Assert.Equal(student.StudentID, model.StudentID);
 
             _studentService.Verify();
         }

@@ -41,10 +41,11 @@ namespace MVC_WebApp_With_TDD.Tests
         [Fact]
         public void GetAll()
         {
+            var campus = new Campus() { CampusID = 1, CampusName = "SMF" };
             var students = new List<Student>()
             {
-                new Student() { StudentID = 1, RefNo = "12456343", FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-10), DateCreated = DateTime.Now },
-                new Student() { StudentID = 2, RefNo = "87984564", FirstName = "Pete", LastName = "Luck", DateOfBirth = DateTime.Now.AddYears(-20), DateCreated = DateTime.Now.AddDays(1) }
+                new Student() { StudentID = 1, RefNo = "12456343", FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-10), DateCreated = DateTime.Now, CampusID = 1, Campus = campus },
+                new Student() { StudentID = 2, RefNo = "87984564", FirstName = "Pete", LastName = "Luck", DateOfBirth = DateTime.Now.AddYears(-20), DateCreated = DateTime.Now.AddDays(1), CampusID = 2, Campus = campus }
             }.AsQueryable();
 
             var mockSet = new Mock<DbSet<Student>>();
@@ -55,12 +56,15 @@ namespace MVC_WebApp_With_TDD.Tests
 
             _dbContext.Setup(c => c.Students).Returns(mockSet.Object);
 
+            _dbContext.Setup(m => m.Students.Include("Campus")).Returns(mockSet.Object);
+
             var result = _studentService.GetAll();
+            
 
             Assert.Equal(2, result.Count());
             Assert.Equal(2, result.FirstOrDefault().StudentID);
 
-            _dbContext.VerifyAll();
+            _dbContext.Verify(v => v.Students.Include("Campus"), Times.Once);
         }
 
         [Fact]

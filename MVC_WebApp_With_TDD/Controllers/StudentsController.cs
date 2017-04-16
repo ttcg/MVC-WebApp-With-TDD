@@ -28,13 +28,16 @@ namespace MVC_WebApp_With_TDD.Controllers
         }
 
         // GET: Students
+        [OutputCache(Duration = 3, VaryByParam = "none", Location = System.Web.UI.OutputCacheLocation.Any)]
         public ActionResult Index()
         {
+            ViewBag.Test = DateTime.Now.ToString();
             return View(_studentService.GetAll().ToList());
         }
 
         // GET: Students/Details/5
         [Route("Students/Details/{id}/{name?}")]
+        
         public ActionResult Details(int? id, string name)
         {
             if (id.HasValue == false)

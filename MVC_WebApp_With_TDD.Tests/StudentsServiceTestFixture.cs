@@ -26,7 +26,7 @@ namespace MVC_WebApp_With_TDD.Tests
             var campus = new Campus() { CampusID = 1, CampusName = "SMF" };
             var Students = new List<Student>()
             {
-                new Student() { StudentID = 1, RefNo = "12456343", FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-10), DateCreated = DateTime.Now, CampusID = 1, Campus = campus },
+                new Student() { StudentID = 1, RefNo = "12456343", FirstName = "John", LastName = "Smith", DateOfBirth = DateTime.Now.AddYears(-9), DateCreated = DateTime.Now, CampusID = 1, Campus = campus },
                 new Student() { StudentID = 2, RefNo = "87984564", FirstName = "Pete", LastName = "Luck", DateOfBirth = DateTime.Now.AddYears(-20), DateCreated = DateTime.Now.AddDays(1), CampusID = 2, Campus = campus }
             };
 

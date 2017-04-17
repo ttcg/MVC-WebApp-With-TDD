@@ -11,6 +11,7 @@ using MVC_WebApp_With_TDD.DbContexts;
 using MVC_WebApp_With_TDD.Models;
 using MVC_WebApp_With_TDD.Services;
 using MVC_WebApp_With_TDD.ViewModels;
+using MVC_WebApp_With_TDD.Filters;
 
 namespace MVC_WebApp_With_TDD.Controllers
 {
@@ -28,6 +29,7 @@ namespace MVC_WebApp_With_TDD.Controllers
         }
 
         // GET: Students
+        [TestActionFilter]
         [OutputCache(Duration = 3, VaryByParam = "none", Location = System.Web.UI.OutputCacheLocation.Any)]
         public ActionResult Index()
         {

@@ -111,6 +111,8 @@
     <Compile Include="Controllers\StudentsControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
+    <Compile Include="StudentsServiceTestFixture.cs" />
+    <Compile Include="StudentsServiceTestWithFixture.cs" />
     <Compile Include="StudentsServiceTestWithMoq.cs" />
   </ItemGroup>
   <ItemGroup>

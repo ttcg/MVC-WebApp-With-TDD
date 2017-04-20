@@ -18,13 +18,16 @@ namespace MVC_WebApp_With_TDD.Controllers
     public class StudentsController : Controller
     {
         private IStudentsService _studentService;
+        private IStudentsService2 _studentService2;
         private ICampusService _campusService;
 
         public StudentsController(
             IStudentsService studentService,
+            IStudentsService2 studentService2,
             ICampusService campusService)
         {
             _studentService = studentService;
+            _studentService2 = studentService2;
             _campusService = campusService;
         }
 
@@ -35,6 +38,11 @@ namespace MVC_WebApp_With_TDD.Controllers
         {
             ViewBag.Test = DateTime.Now.ToString();
             return View(_studentService.GetAll().ToList());
+        }
+
+        public ActionResult Index2()
+        {
+            return View(_studentService2.GetAll2().ToList());
         }
 
         // GET: Students/Details/5
@@ -66,7 +74,7 @@ namespace MVC_WebApp_With_TDD.Controllers
             model.Student.LastName = "Surname";
             model.Student.DateOfBirth = DateTime.Now;
             model.Campuses = PopulateCampusesList();
-
+            
             return View(model);
         }
 

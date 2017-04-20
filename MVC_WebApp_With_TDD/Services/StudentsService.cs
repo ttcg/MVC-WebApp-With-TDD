@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Data.Entity;
+using MVC_WebApp_With_TDD.ViewModels;
 
 namespace MVC_WebApp_With_TDD.Services
 {
@@ -19,7 +20,12 @@ namespace MVC_WebApp_With_TDD.Services
         Student GetByName(string FirstName, string LastName);
     }
 
-    public class StudentsService : IStudentsService
+    public interface IStudentsService2
+    {
+        IEnumerable<StudentIndexViewModel> GetAll2();
+    }
+
+        public class StudentsService : IStudentsService, IStudentsService2
     {
         MVCWebAppDbContext _context;
 
@@ -46,6 +52,42 @@ namespace MVC_WebApp_With_TDD.Services
             return _context.Students
                     .Include(a => a.Campus)
                     .OrderByDescending(o => o.StudentID);
+        }
+
+        public IEnumerable<StudentIndexViewModel> GetAll2()
+        {
+            // inner join LAMBDA
+            //return _context.Students2.Join(_context.Campuses,
+            //    t => t.CampusID,
+            //    c => c.CampusID,
+            //    (t,c) => new StudentIndexViewModel()
+            //    { CampusName = c.CampusName,
+            //    Student = t
+            //    })
+
+            //        .OrderByDescending(o => o.Student.StudentID);
+
+            // inner join LINQ
+            //return from s in _context.Students2
+            //       join c in _context.Campuses
+            //       on s.CampusID equals c.CampusID
+            //       select new StudentIndexViewModel
+            //       {
+            //           Student = s,
+            //           CampusName = c.CampusName
+            //       };
+
+            //left outer join
+            return from s in _context.Students2
+                   join c in _context.Campuses
+                   on s.CampusID equals c.CampusID
+                   into scs
+                   from ac in scs.DefaultIfEmpty()
+                   select new StudentIndexViewModel
+                   {
+                       Student = s,
+                       CampusName = ac.CampusName
+                   };
         }
 
         public Student GetByName(string FirstName, string LastName)

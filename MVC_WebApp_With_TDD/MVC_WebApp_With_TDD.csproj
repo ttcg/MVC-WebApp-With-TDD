@@ -176,6 +176,7 @@
     <Compile Include="Services\CampusService.cs" />
     <Compile Include="Services\StudentsService.cs" />
     <Compile Include="Services\StudentsServiceHardcoding.cs" />
+    <Compile Include="ViewModels\StudentIndexViewModel.cs" />
     <Compile Include="ViewModels\StudentViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +221,7 @@
     <Content Include="Views\Students\Details.cshtml" />
     <Content Include="Views\Students\Edit.cshtml" />
     <Content Include="Views\Students\Index.cshtml" />
+    <Content Include="Views\Students\Index2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

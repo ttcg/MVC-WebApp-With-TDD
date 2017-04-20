@@ -1,0 +1,65 @@
+﻿@model IEnumerable<MVC_WebApp_With_TDD.ViewModels.StudentIndexViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.RefNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.DateOfBirth)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CampusName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Student.DateCreated)
+        </th>        
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Student.RefNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Student.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Student.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Student.DateOfBirth)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CampusName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Student.DateCreated)
+        </td>
+        <td>
+            @*@Html.ActionLink("Edit", "Edit", new { id=item.StudentID, name=item.FirstName }) |
+            @Html.ActionLink("Details", "Details", new { id = item.StudentID, name = item.FirstName }) |
+            <a href="Students/Details/@item.StudentID/@item.FirstName" >Details</a>
+            
+            @Html.ActionLink("Delete", "Delete", new { id=item.StudentID })*@
+        </td>
+    </tr>
+}
+
+</table>
